@@ -5,7 +5,6 @@ import { useStatistics, useCases } from '../hooks/useApi';
 import AIScore from '../components/AIScore';
 import CaseModal from '../components/CaseModal';
 import AlgorithmExplanation from '../components/AlgorithmExplanation';
-import BusinessValueProposition from '../components/BusinessValueProposition';
 
 export default function Home() {
   // Estado para o modal
@@ -312,9 +311,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Business Value Proposition */}
-      <BusinessValueProposition />
 
       {/* Explicação do Algoritmo */}
       <section className="px-6 py-12 bg-white">
