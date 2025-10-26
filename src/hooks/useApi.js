@@ -13,7 +13,7 @@ export function useApi() {
   const executeRequest = async (apiCall) => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const result = await apiCall();
       return result;
@@ -97,7 +97,7 @@ export function useCaseDetail(caseId) {
 
   const fetchCaseDetail = async () => {
     if (!caseId) return;
-    
+
     try {
       const result = await executeRequest(() => apiService.getCaseDetail(caseId));
       setData(result.data);
@@ -118,3 +118,42 @@ export function useCaseDetail(caseId) {
   };
 }
 
+/**
+ * Hook para buscar licitações do PNCP
+ */
+export function usePNCPLicitacoes(diasAtras = 90) {
+  const [data, setData] = useState(null);
+  const [licitacoes, setLicitacoes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchLicitacoes = async (dias = diasAtras) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const result = await apiService.getPNCPLicitacoes(dias);
+
+      if (result.success) {
+        setData(result.data);
+        setLicitacoes(result.data.licitacoes || []);
+      } else {
+        setError(result.message || 'Erro ao buscar licitações');
+      }
+    } catch (err) {
+      console.error('Erro ao buscar licitações PNCP:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    data,
+    licitacoes,
+    total: data?.total || 0,
+    loading,
+    error,
+    fetchLicitacoes,
+  };
+}

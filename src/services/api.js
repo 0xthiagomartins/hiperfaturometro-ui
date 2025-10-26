@@ -15,7 +15,7 @@ class ApiService {
    */
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
-    
+
     const defaultOptions = {
       headers: {
         'Content-Type': 'application/json',
@@ -27,11 +27,11 @@ class ApiService {
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
       return data;
     } catch (error) {
@@ -52,7 +52,7 @@ class ApiService {
    */
   async getCases(filters = {}) {
     const params = new URLSearchParams();
-    
+
     if (filters.limit) params.append('limit', filters.limit);
     if (filters.risk_level) params.append('risk_level', filters.risk_level);
     if (filters.orgao) params.append('orgao', filters.orgao);
@@ -60,7 +60,7 @@ class ApiService {
 
     const queryString = params.toString();
     const endpoint = queryString ? `/cases?${queryString}` : '/cases';
-    
+
     return this.request(endpoint);
   }
 
@@ -91,6 +91,14 @@ class ApiService {
    */
   async healthCheck() {
     return this.request('/health');
+  }
+
+  /**
+   * Busca licitações do PNCP
+   * @param {number} diasAtras - Número de dias para buscar (padrão: 90)
+   */
+  async getPNCPLicitacoes(diasAtras = 90) {
+    return this.request(`/pncp/analisar?dias_atras=${diasAtras}`);
   }
 }
 
